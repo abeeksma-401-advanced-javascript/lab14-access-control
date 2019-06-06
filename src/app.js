@@ -23,6 +23,8 @@ app.use(express.urlencoded({extended:true}));
 // Routes
 app.use(authRouter);
 
+app.use(require('./newrouter'));
+
 // Catchalls
 app.use(notFound);
 app.use(errorHandler);

@@ -16,6 +16,17 @@ const users = new mongoose.Schema({
   password: {type:String, required:true},
   email: {type: String},
   role: {type: String, default:'user', enum: ['admin','editor','user']},
+}, {toObject: { virtuals: true }, toJSON: { virtuals: true} });
+
+users.virtual('acl', {
+  ref: 'roles', 
+  localField: 'role',
+  foriegnField: 'role',
+  justOne: true
+});
+
+users.pre('save', function() {
+  this.populate('acl');
 });
 
 const capabilities = {
