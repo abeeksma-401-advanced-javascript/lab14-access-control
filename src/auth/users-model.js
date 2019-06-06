@@ -15,7 +15,7 @@ const users = new mongoose.Schema({
   username: {type:String, required:true, unique:true},
   password: {type:String, required:true},
   email: {type: String},
-  role: {type: String, default:'user', enum: ['admin','editor','user']},
+  role: {type: String, default:'user', enum: ['admin','editor','user', 'superuser']},
 }, {toObject: { virtuals: true }, toJSON: { virtuals: true} });
 
 users.virtual('acl', {
@@ -30,6 +30,7 @@ users.pre('save', function() {
 });
 
 const capabilities = {
+  superuser: ['create', 'read', 'update', 'delete', 'everything'],
   admin: ['create','read','update','delete'],
   editor: ['create', 'read', 'update'],
   user: ['read'],
