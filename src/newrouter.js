@@ -20,19 +20,21 @@ router.get('/something-to-read', auth('read'), (req, res) => {
 }); //read
 
 router.post('/create-a-thing', auth('create'), (req, res) => {
-  //something goes here to change the data on routes
+  res.send('This user is able to POST')
 }); //create
 
 router.put('/update', auth('put'), (req, res) => {
-  //something goes here to update...things?
+  res.send('This user is able to PUT')
 }); //update
 
 router.patch('/jp', auth('put'), (req, res) => {
-  //simialr to above need to update the stuffs
+  res.send('This user is able to PUT(patch)')
 }); //update
 
 router.delete('/bye-bye', auth('delete'), (req, res) => {
-  //delete some shit
+  res.send('This user is able to DELETE')
 }); //delete
 
-router.get('/everything', auth('')) //superuser
+router.get('/everything', auth(''), (req, res) => {
+  res.send('This user is able to do GET, POST, PUT, and DELETE')
+}); //superuser
