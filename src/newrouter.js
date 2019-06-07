@@ -11,11 +11,11 @@ router.get('/public-stuff', (req, res) => {
   res.send('Hey! this is for everyone CommuSite');
 }); //visible by anyone
 
-router.get('/hidden-stuff', auth, (req, res) => {
+router.get('/hidden-stuff', auth(), (req, res) => {
   res.send('you have reached the hidden stuff only available to those who have logged in');
 }); //valid login
 
-router.get('/something-to-read', auth('read'), (req, res) => {
+router.get('/something-to-read', auth(), (req, res) => {
   res.send('you can read the something to-read route');
 }); //read
 
@@ -23,11 +23,11 @@ router.post('/create-a-thing', auth('create'), (req, res) => {
   res.send('This user is able to POST')
 }); //create
 
-router.put('/update', auth('put'), (req, res) => {
+router.put('/update', auth('update'), (req, res) => {
   res.send('This user is able to PUT')
 }); //update
 
-router.patch('/jp', auth('put'), (req, res) => {
+router.patch('/jp', auth('update'), (req, res) => {
   res.send('This user is able to PUT(patch)')
 }); //update
 

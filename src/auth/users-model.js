@@ -21,7 +21,7 @@ const users = new mongoose.Schema({
 users.virtual('acl', {
   ref: 'roles', 
   localField: 'role',
-  foriegnField: 'role',
+  foreignField: 'role',
   justOne: true
 });
 
@@ -106,7 +106,11 @@ users.methods.generateToken = function(type) {
 };
 
 users.methods.can = function(capability) {
-  return capabilities[this.role].includes(capability);
+  if (!this.acl || !this.acl.capabilities)
+  return false;
+
+return this.acl.capabilities.includes(capability);
+  //return capabilities[this.role].includes(capability);
 };
 
 users.methods.generateKey = function() {
