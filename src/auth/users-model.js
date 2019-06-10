@@ -15,10 +15,22 @@ const users = new mongoose.Schema({
   username: {type:String, required:true, unique:true},
   password: {type:String, required:true},
   email: {type: String},
-  role: {type: String, default:'user', enum: ['admin','editor','user']},
+  role: {type: String, default:'user', enum: ['admin','editor','user', 'superuser']},
+}, {toObject: { virtuals: true }, toJSON: { virtuals: true} });
+
+users.virtual('acl', {
+  ref: 'roles', 
+  localField: 'role',
+  foreignField: 'role',
+  justOne: true
+});
+
+users.pre('save', function() {
+  this.populate('acl');
 });
 
 const capabilities = {
+  superuser: ['create', 'read', 'update', 'delete', 'everything'],
   admin: ['create','read','update','delete'],
   editor: ['create', 'read', 'update'],
   user: ['read'],
@@ -94,7 +106,11 @@ users.methods.generateToken = function(type) {
 };
 
 users.methods.can = function(capability) {
-  return capabilities[this.role].includes(capability);
+  if (!this.acl || !this.acl.capabilities)
+  return false;
+
+return this.acl.capabilities.includes(capability);
+  //return capabilities[this.role].includes(capability);
 };
 
 users.methods.generateKey = function() {
